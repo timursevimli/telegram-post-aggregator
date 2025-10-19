@@ -1,0 +1,11 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./config.json:/usr/local/bin/config.json
+      - ./first.session:/usr/local/bin/first.session
+    environment:
+      - RUST_LOG=info
+    restart: always
