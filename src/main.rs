@@ -89,6 +89,7 @@ async fn handle_update(
                                     Err(e) => {
                                         error!("Error forwarding message: {}", e);
                                         try_count += 1;
+                                        sleep(5_000).await;
                                     }
                                 }
                             }
@@ -106,7 +107,7 @@ async fn handle_update(
 async fn periodic_health_check(client: &Client) {
     info!("Starting periodic health check...");
     loop {
-        tokio::time::sleep(Duration::from_secs(300)).await; // Every 5 minutes
+        sleep(300_000).await;
 
         match client.get_me().await {
             Ok(_) => info!("Health check: Connection OK"),
@@ -248,6 +249,10 @@ fn prompt(message: &str) -> String {
     let mut input = String::new();
     stdin().read_line(&mut input).expect("Failed to read input");
     input.trim().to_string()
+}
+
+async fn sleep(ms: u64) {
+    tokio::time::sleep(Duration::from_millis(ms)).await;
 }
 
 fn load_config<P: AsRef<Path>>(path: P) -> Result<AppConfig, std::io::Error> {
