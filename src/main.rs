@@ -21,6 +21,7 @@ const SESSION_FILE: &str = "first.session";
 struct AppConfig {
     sources: Vec<i64>,
     targets: Vec<i64>,
+    verbose: bool,
 }
 
 struct MyPolicy;
@@ -55,12 +56,15 @@ async fn handle_update(
         Update::NewMessage(message) if !message.outgoing() => {
             let chat = message.chat();
             let chat_id = chat.id();
-            let chat_name = chat.name();
-            let message_text = message.text();
-            info!(
-                "\nChat: {}\nFrom: {}\n Message: {}\n",
-                chat_id, chat_name, message_text
-            );
+
+            if config.verbose {
+                let chat_name = chat.name();
+                let message_text = message.text();
+                info!(
+                    "\nChat: {}\nFrom: {}\n Message: {}\n",
+                    chat_id, chat_name, message_text
+                );
+            }
 
             if is_channel_allowed(&config.sources, chat_id) {
                 for target in &config.targets {
