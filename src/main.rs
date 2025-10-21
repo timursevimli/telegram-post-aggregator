@@ -126,7 +126,6 @@ async fn async_main(
         .expect("TG ID format is wrong, please use integer");
     let api_hash = env::var("TG_HASH").expect("TG_HASH is missing").to_string();
     let phone = env::var("PHONE").expect("PHONE is missing").to_string();
-    // let token = env::args().nth(1).expect("token missing");
 
     info!("Connecting to Telegram...");
     let client = Client::connect(Config {
